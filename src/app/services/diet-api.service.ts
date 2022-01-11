@@ -14,4 +14,17 @@ export class DietApiService {
   getResource(resource: string): Observable<any> {
     return this.http.get(this.url + resource, { headers: this.header });
   }
+  postResource(resource: string, data: any): Observable<any> {
+    return this.http.post(this.url + resource, data, { headers: this.header });
+  }
+  updateResource(resource: string, data: any, id: number): Observable<any> {
+    return this.http.put(`${this.url + resource}/${id}`, data, {
+      headers: this.header,
+    });
+  }
+  deleteResource(resource: string, id: number): Observable<any> {
+    return this.http.delete(`${this.url + resource}/${id}`, {
+      headers: this.header,
+    });
+  }
 }
