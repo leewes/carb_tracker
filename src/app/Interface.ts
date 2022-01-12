@@ -13,11 +13,15 @@ export interface User {
   first_name: string;
   last_name: string;
   dob?: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export interface Day {
   id?: number;
   name: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export interface Carb {
@@ -25,4 +29,6 @@ export interface Carb {
   breakfast: number;
   lunch: number;
   dinner: number;
+  created_at?: Date;
+  updated_at?: Date;
 }
