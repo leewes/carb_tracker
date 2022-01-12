@@ -56,46 +56,52 @@ export class AppComponent implements OnInit {
     this.uiService.getId().subscribe((id) => (this.selectUser = id));
   }
 
-  changeChart($event: string) {
+  changeChart($event: string): void {
     this.type = $event;
 
-    if ($event === 'pie') {
-      if (this.hasUser()) {
-        this.uiService.toggleGraph(true);
+    if (this.hasUser()) {
+      this.uiService.toggleGraph(true);
+      if ($event === 'pie') {
         this.sortDistributionData();
+      } else if ($event === 'line') {
+        this.sortTrendData();
       } else {
-        this.uiService.toggleGraph(false);
+        this.sortDailyData();
       }
-    } else if ($event === 'line') {
-      this.sortTrendData();
     } else {
-      this.sortDailyData();
+      this.uiService.toggleGraph(false);
     }
   }
 
   hasUser(): boolean {
-    if (this.meals.filter(meal=> meal.users_id === this.selectUser).length === 0) {
+    if (
+      this.meals.filter((meal) => meal.users_id === this.selectUser).length ===
+      0
+    ) {
       return false;
     } else {
       return true;
     }
   }
 
-  sortDistributionData() {
-    const data: any = this.meals
+  getUserCarbs(): any {
+    return this.meals
       .filter((meal) => meal.users_id === this.selectUser)
       .map((meal) => meal.carbs_id)
-      .map((id) => this.carbs.find((carb) => carb.id === id))
-      .reduce(
-        (sum: number[], carb: any) => {
-          sum[0] += carb.breakfast;
-          sum[1] += carb.lunch;
-          sum[2] += carb.dinner;
+      .map((id) => this.carbs.find((carb) => carb.id === id));
+  }
 
-          return sum;
-        },
-        [0, 0, 0]
-      );
+  sortDistributionData(): void {
+    const data: any = this.getUserCarbs().reduce(
+      (sum: number[], carb: any) => {
+        sum[0] += carb.breakfast;
+        sum[1] += carb.lunch;
+        sum[2] += carb.dinner;
+
+        return sum;
+      },
+      [0, 0, 0]
+    );
     this.data = {
       datasets: [
         {
@@ -106,8 +112,24 @@ export class AppComponent implements OnInit {
       labels: ['breakfast', 'lunch', 'dinner'],
     };
   }
-  sortTrendData() {
-    //organize data into line form then pass down as props
+  sortTrendData(): void {
+    const data: any = this.getUserCarbs().reduce((carbList: [], carb: any) => {
+      return [...carbList, carb.breakfast + carb.lunch + carb.dinner];
+    }, []);
+
+    const labels: string[] = this.meals
+      .filter((meal) => meal.users_id === this.selectUser)
+      .map((meal) => `${meal.week}.${meal.days_id}`);
+
+    this.data = {
+      datasets: [
+        {
+          label: 'Daily Carbs',
+          data: data,
+        },
+      ],
+      labels: labels,
+    };
   }
   sortDailyData() {
     //organize data into bar form then pass down as props
