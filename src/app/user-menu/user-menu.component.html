@@ -1,4 +1,4 @@
 <h3>USERS</h3>
 <div class="users" *ngFor="let user of users" >
-    <app-user [user]="user"></app-user>
+    <app-user [user]="user" (nameSelect)="handleName($event)"></app-user>
 </div>  

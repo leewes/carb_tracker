@@ -4,13 +4,15 @@ import { User } from '../Interface';
 @Component({
   selector: 'app-user-menu',
   templateUrl: './user-menu.component.html',
-  styleUrls: ['./user-menu.component.css']
+  styleUrls: ['./user-menu.component.css'],
 })
 export class UserMenuComponent implements OnInit {
   @Input() users: User[] = [];
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  handleName($event: any) {
+    console.log($event);
   }
-
 }
