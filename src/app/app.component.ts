@@ -55,6 +55,7 @@ export class AppComponent implements OnInit {
 
     this.uiService.getId().subscribe((id) => (this.selectUser = id));
   }
+  
   changeChart($event: string) {
     this.type = $event;
 

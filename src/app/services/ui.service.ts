@@ -6,16 +6,28 @@ import { Observable, Subject } from 'rxjs';
 })
 export class UiService {
   private user_id: number = 0;
-  private subject = new Subject<any>();
+  private user = new Subject<any>();
+
+  private showGraph: boolean = true;
+  private graph = new Subject<any>();
 
   constructor() {}
 
+  toggleGraph() {
+    this.showGraph = !this.showGraph
+    this.graph.next(this.showGraph);
+  }
+
+  getGraph(): Observable<any> {
+    return this.graph.asObservable();
+  }
+
   selectUser(id: number): void {
     this.user_id = id;
-    this.subject.next(this.user_id);
+    this.user.next(this.user_id);
   }
 
   getId(): Observable<any> {
-    return this.subject.asObservable();
+    return this.user.asObservable();
   }
 }
