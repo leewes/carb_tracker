@@ -4,4 +4,6 @@
   [data]="chartData"
   [options]="chartOptions"
   [type]="chartType"
+  *ngIf="showGraph"
 ></canvas>
+<div class="error" *ngIf="!showGraph">Missing Data</div>

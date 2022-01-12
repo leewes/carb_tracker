@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { UiService } from '../services/ui.service';
 
 @Component({
   selector: 'app-graph',
@@ -7,6 +8,7 @@ import { Component, Input, OnInit, Output } from '@angular/core';
 })
 export class GraphComponent implements OnInit {
   @Input() chartType: any = 'bar';
+  @Input() chartOptions: any = {};
   @Input() chartData: any = {
     datasets: [
       {
@@ -17,11 +19,13 @@ export class GraphComponent implements OnInit {
     ],
     labels: ['breakfast', 'lunch', 'dinner'],
   };
-  @Input() chartOptions: any = {};
+  
+  showGraph: boolean = true;
 
-  constructor() {
+  constructor(private uiService: UiService) {
   }
 
   ngOnInit(): void {
+    this.uiService.getGraph().subscribe(value => this.showGraph = value);
   }
 }

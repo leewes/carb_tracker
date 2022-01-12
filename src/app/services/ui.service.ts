@@ -13,8 +13,8 @@ export class UiService {
 
   constructor() {}
 
-  toggleGraph() {
-    this.showGraph = !this.showGraph
+  toggleGraph(value: boolean) {
+    this.showGraph = value;
     this.graph.next(this.showGraph);
   }
 
