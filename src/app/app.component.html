@@ -1,4 +1,5 @@
 <h1>{{ title }}</h1>
+<app-user-menu [users]="users"></app-user-menu>
 <div class="container"><app-graph [chartType]="type" [chartOptions]="option" [chartData]="data"></app-graph></div>
 <app-button name="Distribution" type="pie" (clicked)="changeChart($event)"></app-button>
 <app-button name="Trend" type="line" (clicked)="changeChart($event)"></app-button>
