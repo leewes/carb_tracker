@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { Meal, User } from '../Interface';
-import { DietApiService } from '../services/diet-api.service';
+import { Component, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-graph',
@@ -8,12 +6,22 @@ import { DietApiService } from '../services/diet-api.service';
   styleUrls: ['./graph.component.css'],
 })
 export class GraphComponent implements OnInit {
-  meals: Meal[] = [{ users_id: -1, week: -1, days_id: -1, carbs_id: -1 }];
-  constructor(private dietApiService: DietApiService) {}
+  @Input() chartType: any = 'bar';
+  @Input() chartData: any = {
+    datasets: [
+      {
+        label: 'Monday',
+        data: [200, 500, 600],
+        backgroundColor: ['blue', 'green', 'red']
+      },
+    ],
+    labels: ['breakfast', 'lunch', 'dinner'],
+  };
+  @Input() chartOptions: any = {};
+
+  constructor() {
+  }
 
   ngOnInit(): void {
-    this.dietApiService
-      .getResource('users')
-      .subscribe((meals) => (this.meals = meals));
   }
 }
