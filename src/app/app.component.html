@@ -1,13 +1,14 @@
 <h1>{{ title }}</h1>
 <app-user-menu [users]="users"></app-user-menu>
 <div class="graph-menu" *ngIf="!(selectUser === 0)">
-  <div class="container">
+  <div class="container" *ngIf="!(data.datasets[0].label === 'No Data Set')">
     <app-graph
       [chartType]="type"
       [chartOptions]="option"
       [chartData]="data"
     ></app-graph>
   </div>
+  <div *ngIf="data.datasets[0].label === 'No Data Set'">Please select a chart type below to view.</div>
   <app-button
     name="Distribution"
     type="pie"
