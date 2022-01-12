@@ -34,7 +34,10 @@ export class AppComponent implements OnInit {
     maintainAspectRatio: false,
   };
 
-  constructor(private dietApiService: DietApiService, private uiService: UiService) {}
+  constructor(
+    private dietApiService: DietApiService,
+    private uiService: UiService
+  ) {}
 
   ngOnInit(): void {
     this.dietApiService.getResource('users').subscribe((users) => {
@@ -42,37 +45,57 @@ export class AppComponent implements OnInit {
     });
     this.dietApiService
       .getResource('meals')
-      .subscribe((meals) => (this.meals = meals))
-      .unsubscribe();
+      .subscribe((meals) => (this.meals = meals));
     this.dietApiService
       .getResource('days')
-      .subscribe((days) => (this.days = days))
-      .unsubscribe();
+      .subscribe((days) => (this.days = days));
     this.dietApiService
       .getResource('carbs')
-      .subscribe((carbs) => (this.carbs = carbs))
-      .unsubscribe();
+      .subscribe((carbs) => (this.carbs = carbs));
+
+    this.uiService.getId().subscribe((id) => (this.selectUser = id));
   }
   changeChart($event: string) {
     this.type = $event;
-    this.uiService.getId().subscribe(id => this.selectUser = id)
 
     if ($event === 'pie') {
-
+      this.sortDistributionData();
     } else if ($event === 'line') {
-
+      this.sortTrendData();
     } else {
-      //bar
+      this.sortDailyData();
     }
-    //call get___Data depending on the $event
   }
-  getDistributionData(user_id: number) {
-    //organize data into pie form then pass down as props
+
+  sortDistributionData() {
+    const data: any = this.meals
+      .filter((meal) => meal.users_id === this.selectUser)
+      .map((meal) => meal.carbs_id)
+      .map((id) => this.carbs.find((carb) => carb.id === id))
+      .reduce(
+        (sum: number[], carb: any) => {
+          sum[0] += carb.breakfast;
+          sum[1] += carb.lunch;
+          sum[2] += carb.dinner;
+
+          return sum;
+        },
+        [0, 0, 0]
+      );
+    this.data = {
+      datasets: [
+        {
+          data: data,
+          backgroundColor: ['blue', 'green', 'red'],
+        },
+      ],
+      labels: ['breakfast', 'lunch', 'dinner'],
+    };
   }
-  getTrendData() {
+  sortTrendData() {
     //organize data into line form then pass down as props
   }
-  getDailyData() {
+  sortDailyData() {
     //organize data into bar form then pass down as props
   }
 }
