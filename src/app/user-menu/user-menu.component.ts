@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { User } from '../Interface';
+import { UiService } from '../services/ui.service';
 
 @Component({
   selector: 'app-user-menu',
@@ -8,11 +9,11 @@ import { User } from '../Interface';
 })
 export class UserMenuComponent implements OnInit {
   @Input() users: User[] = [];
-  constructor() {}
+  constructor(private uiService: UiService) {}
 
   ngOnInit(): void {}
 
   handleName($event: any) {
-    console.log($event);
+    this.uiService.selectUser(Number.parseInt($event));
   }
 }

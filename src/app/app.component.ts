@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Carb, Day, Meal, User } from './Interface';
 import { DietApiService } from './services/diet-api.service';
+import { UiService } from './services/ui.service';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ export class AppComponent implements OnInit {
   users: User[] = [{ first_name: 'none', last_name: 'none' }];
   days: Day[] = [{ name: 'No Day' }];
   carbs: Carb[] = [{ breakfast: 0, lunch: 0, dinner: 0 }];
+  selectUser: number = 0;
 
   //Graph.js states
   type: string = 'bar';
@@ -23,7 +25,7 @@ export class AppComponent implements OnInit {
       {
         label: 'No Data Set',
         data: [0, 0, 0],
-        backgroundColor: ['blue', 'green', 'red']
+        backgroundColor: ['blue', 'green', 'red'],
       },
     ],
     labels: ['breakfast', 'lunch', 'dinner'],
@@ -32,7 +34,7 @@ export class AppComponent implements OnInit {
     maintainAspectRatio: false,
   };
 
-  constructor(private dietApiService: DietApiService) {}
+  constructor(private dietApiService: DietApiService, private uiService: UiService) {}
 
   ngOnInit(): void {
     this.dietApiService.getResource('users').subscribe((users) => {
@@ -40,19 +42,31 @@ export class AppComponent implements OnInit {
     });
     this.dietApiService
       .getResource('meals')
-      .subscribe((meals) => (this.meals = meals));
+      .subscribe((meals) => (this.meals = meals))
+      .unsubscribe();
     this.dietApiService
       .getResource('days')
-      .subscribe((days) => (this.days = days));
+      .subscribe((days) => (this.days = days))
+      .unsubscribe();
     this.dietApiService
       .getResource('carbs')
-      .subscribe((carbs) => (this.carbs = carbs));
+      .subscribe((carbs) => (this.carbs = carbs))
+      .unsubscribe();
   }
   changeChart($event: string) {
     this.type = $event;
+    this.uiService.getId().subscribe(id => this.selectUser = id)
+
+    if ($event === 'pie') {
+
+    } else if ($event === 'line') {
+
+    } else {
+      //bar
+    }
     //call get___Data depending on the $event
   }
-  getDistributionData() {
+  getDistributionData(user_id: number) {
     //organize data into pie form then pass down as props
   }
   getTrendData() {
