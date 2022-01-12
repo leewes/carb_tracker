@@ -121,7 +121,7 @@ export class AppComponent implements OnInit {
 
     const labels: string[] = this.meals
       .filter((meal) => meal.users_id === this.selectUser)
-      .map((meal) => `${meal.week}.${meal.days_id}`);
+      .map((meal) => `${(meal.week - 1) * 7 + meal.days_id}`);
 
     this.data = {
       datasets: [
