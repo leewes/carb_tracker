@@ -55,16 +55,29 @@ export class AppComponent implements OnInit {
 
     this.uiService.getId().subscribe((id) => (this.selectUser = id));
   }
-  
+
   changeChart($event: string) {
     this.type = $event;
 
     if ($event === 'pie') {
-      this.sortDistributionData();
+      if (this.hasUser()) {
+        this.uiService.toggleGraph(true);
+        this.sortDistributionData();
+      } else {
+        this.uiService.toggleGraph(false);
+      }
     } else if ($event === 'line') {
       this.sortTrendData();
     } else {
       this.sortDailyData();
+    }
+  }
+
+  hasUser(): boolean {
+    if (this.meals.filter(meal=> meal.users_id === this.selectUser).length === 0) {
+      return false;
+    } else {
+      return true;
     }
   }
 
