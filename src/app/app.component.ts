@@ -9,7 +9,7 @@ import { DietApiService } from './services/diet-api.service';
 })
 export class AppComponent implements OnInit {
   title: string = 'Carb Tracker';
-  
+
   //API states
   meals: Meal[] = [{ users_id: -1, week: -1, days_id: -1, carbs_id: -1 }];
   users: User[] = [{ first_name: 'none', last_name: 'none' }];
@@ -18,6 +18,19 @@ export class AppComponent implements OnInit {
 
   //Graph.js states
   type: string = 'bar';
+  data: any = {
+    datasets: [
+      {
+        label: 'No Data Set',
+        data: [0, 0, 0],
+        backgroundColor: ['blue', 'green', 'red']
+      },
+    ],
+    labels: ['breakfast', 'lunch', 'dinner'],
+  };
+  option: any = {
+    maintainAspectRatio: false,
+  };
 
   constructor(private dietApiService: DietApiService) {}
 
@@ -35,7 +48,7 @@ export class AppComponent implements OnInit {
       .getResource('carbs')
       .subscribe((carbs) => (this.carbs = carbs));
   }
-  changeChart($event:string) {
+  changeChart($event: string) {
     this.type = $event;
     //call get___Data depending on the $event
   }
