@@ -1,6 +1,27 @@
-<h1>{{ title }}{{selectUser }}</h1>
+<h1>{{ title }}</h1>
 <app-user-menu [users]="users"></app-user-menu>
-<div class="container"><app-graph [chartType]="type" [chartOptions]="option" [chartData]="data"></app-graph></div>
-<app-button name="Distribution" type="pie" (clicked)="changeChart($event)"></app-button>
-<app-button name="Trend" type="line" (clicked)="changeChart($event)"></app-button>
-<app-button name="Daily" type="bar" (clicked)="changeChart($event)"></app-button>
+<div class="graph-menu" *ngIf="!(selectUser === 0)">
+  <div class="container">
+    <app-graph
+      [chartType]="type"
+      [chartOptions]="option"
+      [chartData]="data"
+    ></app-graph>
+  </div>
+  <app-button
+    name="Distribution"
+    type="pie"
+    (clicked)="changeChart($event)"
+  ></app-button>
+  <app-button
+    name="Trend"
+    type="line"
+    (clicked)="changeChart($event)"
+  ></app-button>
+  <app-button
+    name="Daily"
+    type="bar"
+    (clicked)="changeChart($event)"
+  ></app-button>
+</div>
+<h3 *ngIf="selectUser === 0">Please Select a User</h3>
