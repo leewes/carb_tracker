@@ -17,6 +17,8 @@ export class AppComponent implements OnInit {
   days: Day[] = [{ name: 'No Day' }];
   carbs: Carb[] = [{ breakfast: 0, lunch: 0, dinner: 0 }];
   selectUser: number = 0;
+  selectWeek: number = 1;
+  selectDay: number = 1;
 
   //Graph.js states
   type: string = 'bar';
@@ -66,7 +68,7 @@ export class AppComponent implements OnInit {
       } else if ($event === 'line') {
         this.sortTrendData();
       } else {
-        this.sortDailyData();
+        this.sortDailyData(this.selectWeek, this.selectDay);
       }
     } else {
       this.uiService.toggleGraph(false);
@@ -126,12 +128,34 @@ export class AppComponent implements OnInit {
         {
           label: 'Daily Carbs',
           data: data,
+          borderColor: 'red'
         },
       ],
       labels: labels,
     };
   }
-  sortDailyData() {
-    //organize data into bar form then pass down as props
+
+  sortDailyData(week: number, day: number): void {
+    const carb_id: number = this.meals.filter(
+      (meal) =>
+        meal.users_id === this.selectUser &&
+        meal.week === week &&
+        meal.days_id === day
+    )[0].carbs_id;
+
+    const dailyCarb: any = this.carbs.find((carb) => {
+      return carb.id === carb_id;
+    });
+
+    this.data = {
+      datasets: [
+        {
+          label: `Carb Intake for Week ${week}, ${this.days[day - 1].name}`,
+          data: [dailyCarb.breakfast, dailyCarb.lunch, dailyCarb.dinner],
+          backgroundColor: ['red', 'green', 'blue']
+        },
+      ],
+      labels: ['breakfast', 'lunch', 'dinner'],
+    };
   }
 }
