@@ -55,7 +55,15 @@ export class AppComponent implements OnInit {
       .getResource('carbs')
       .subscribe((carbs) => (this.carbs = carbs));
 
-    this.uiService.getId().subscribe((id) => (this.selectUser = id));
+    this.uiService.getId().subscribe((id) => {
+      this.selectUser = id;
+      //Set graph display dependent on if user has meal data
+      if (this.hasUser()) {
+        this.uiService.toggleGraph(true);
+      } else {
+        this.uiService.toggleGraph(false);
+      }
+    });
   }
 
   changeChart($event: string): void {
@@ -68,6 +76,9 @@ export class AppComponent implements OnInit {
       } else if ($event === 'line') {
         this.sortTrendData();
       } else {
+        //By default always start on the first day
+        this.selectWeek = 1;
+        this.selectDay = 1;
         this.sortDailyData(this.selectWeek, this.selectDay);
       }
     } else {
@@ -104,6 +115,7 @@ export class AppComponent implements OnInit {
       },
       [0, 0, 0]
     );
+
     this.data = {
       datasets: [
         {
@@ -114,6 +126,7 @@ export class AppComponent implements OnInit {
       labels: ['breakfast', 'lunch', 'dinner'],
     };
   }
+
   sortTrendData(): void {
     const data: any = this.getUserCarbs().reduce((carbList: [], carb: any) => {
       return [...carbList, carb.breakfast + carb.lunch + carb.dinner];
@@ -128,7 +141,7 @@ export class AppComponent implements OnInit {
         {
           label: 'Daily Carbs',
           data: data,
-          borderColor: 'red'
+          borderColor: 'red',
         },
       ],
       labels: labels,
@@ -152,7 +165,7 @@ export class AppComponent implements OnInit {
         {
           label: `Carb Intake for Week ${week}, ${this.days[day - 1].name}`,
           data: [dailyCarb.breakfast, dailyCarb.lunch, dailyCarb.dinner],
-          backgroundColor: ['red', 'green', 'blue']
+          backgroundColor: ['red', 'green', 'blue'],
         },
       ],
       labels: ['breakfast', 'lunch', 'dinner'],
